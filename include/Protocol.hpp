@@ -7,6 +7,7 @@ namespace az{
 class Protocol {
     public: 
         enum class Type {
+            None,
             I2C,
             UART,
             SPI
@@ -34,26 +35,17 @@ class Protocol {
     virtual bool receive(std::string& outdata)=0; //receive data through protocol
 
     
-    const std::string& getName() const{
-        return m_name;
-    };
-    Type getType() const{
-        return m_type;
-    };
-    State getState() const{
-        return m_state;
-    };
+    const std::string& getName() const;
+    Type getType() const;
+    State getState() const;
 
     protected:
+        static constexpr State defaultState = State::Uninitialized; //static to jedna wartosc dla całej klasy - dla wszytstkich obiektów
+        static constexpr Type defaultType = Type::None; //a constexpr to wartosc stała znana w czasie kompilacji
         //constructor
-       Protocol(const std::string& name, Type type):m_name(name), m_type(type), m_state(State::Uninitialized){} 
-        bool setState(State newState){
-            if(m_state == State::Error){
-                return false;
-            }
-            m_state=newState;
-            return true;
-        }
+        Protocol() = default; //default constructor
+       Protocol(const std::string& name, Type type);
+       bool setState(State newState);
      private:
         std::string m_name;
         Type m_type;
