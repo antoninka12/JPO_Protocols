@@ -65,7 +65,7 @@ namespace az{
                     return false;
                 }
                 
-                const std::size_t byteCount = data.size();
+                const std::size_t byteCount = data.size(); //to zmienic
 
                 if (byteCount < 2) {
                     return false;

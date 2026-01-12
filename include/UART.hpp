@@ -2,9 +2,21 @@
 #include "Protocol.hpp"
 
 namespace az{
-
+    /**
+     * \class UART
+     * \brief UART communication protocol class.
+     * It dereives form Protocol base class.
+     * It provides methods for configurating, initializing, sending and receiving data
+     * through UART protocol.
+     * It includes fields specific for UART protocol. F.e. pins, baud rate.
+     * \author Antonia Zdziebko
+     */
     class UART : public Protocol{
         private:
+             /**
+             * \brief SPI specific fields
+             * They represent standard configuration for SPI protocol.
+            */
             int m_pinTx;
             int m_pinRx;
             int m_baudRate;

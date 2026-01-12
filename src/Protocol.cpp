@@ -14,7 +14,7 @@ namespace az{
         return m_state;
     }
     bool Protocol::setState(State newState){
-        if(m_state == State::Error && newState != State::Uninitialized){
+        if(m_state == State::Error && newState != State::Uninitialized){ 
                 return false;
         }
         m_state=newState;
