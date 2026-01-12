@@ -1,5 +1,5 @@
 #include "I2C.hpp"
-//reinit moze dodac?????
+
 namespace az{
             I2C::I2C():Protocol("I2C", Type::I2C),
             m_busid(-1), m_deviceAddress(-1), m_SDApin(-1), m_SCLpin(-1), m_frequency(0){}
@@ -35,7 +35,8 @@ namespace az{
             }
             bool I2C::isConfigValid() const {
                 return m_busid >= 0 &&
-                m_deviceAddress >= 0x08 && m_deviceAddress <= 0x77 &&
+                m_deviceAddress >= 0x08 && 
+                m_deviceAddress <= 0x77 &&
                 m_SDApin >= 0 &&
                 m_SCLpin >= 0 &&
                 m_SDApin != m_SCLpin &&
@@ -59,11 +60,17 @@ namespace az{
                 deinitHardware();
                 return getState() == State::Uninitialized;
             }
-            bool I2C::send(const std::string& data){
+            bool I2C::send(const std::string& data){ //mozna dodac sprawdzanie czy magistrala jest zajeta
                 if(getState() != State::Ready){
                     return false;
                 }
-                if(data.empty()){
+                
+                const std::size_t byteCount = data.size();
+
+                if (byteCount < 2) {
+                    return false;
+                }
+                if (byteCount > 32) {
                     return false;
                 }
                 //sendind data through I2C
@@ -75,52 +82,62 @@ namespace az{
                     return false;
                 }
 
-            outdata="Data tgrough I2C";
-            return true;
+                outdata="Data through I2C";
+                return true;
             }
 
             //setters and getters
-            void I2C::setBusID(BusID busid){
+            bool I2C::setBusID(BusID busid){
                 if(busid >=0 && busid != m_busid){
                     m_busid=busid;
                     setState(State::Uninitialized);
+                    return true;
                 }
+                return false;
             }
             BusID I2C::getBusID() const{
                 return m_busid;
             }
-            void I2C::setDeviceAddress(int deviceAddress){
+            bool I2C::setDeviceAddress(int deviceAddress){
                 if(deviceAddress >= 0x08 && deviceAddress <= 0x77 && deviceAddress != m_deviceAddress){
                     m_deviceAddress=deviceAddress;
                     setState(State::Uninitialized);
+                    return true;
                 }   
+                return false;
             }
             int I2C::getDeviceAddress() const{
                 return m_deviceAddress;
             }
-            void I2C::setSDApin(int SDApin){
+            bool I2C::setSDApin(int SDApin){
                 if(SDApin >=0 && SDApin != m_SCLpin && SDApin != m_SDApin){
                     m_SDApin=SDApin;
                     setState(State::Uninitialized);
+                    return true;
                 }
+                return false;
             }
             int I2C::getSDApin() const{
                 return m_SDApin;
             }
-            void I2C::setSCLpin(int SCLpin){
+            bool I2C::setSCLpin(int SCLpin){
                 if(SCLpin >=0 && SCLpin != m_SDApin && SCLpin != m_SCLpin){
                     m_SCLpin=SCLpin;
                     setState(State::Uninitialized);
+                    return true;
                 }
+                return false;
             }
             int I2C::getSCLpin() const{
                 return m_SCLpin;
             }
-            void I2C::setFrequency(int frequency){
+            bool I2C::setFrequency(int frequency){
                 if(frequency >0 && frequency != m_frequency){
                     m_frequency=frequency;
                     setState(State::Uninitialized);
+                    return true;
                 }
+                return false;
             }
             int I2C::getFrequency() const{
                 return m_frequency;

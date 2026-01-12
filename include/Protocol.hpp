@@ -1,7 +1,8 @@
 #pragma once
 
 #include <string>
-
+//dodac noexcept gdzie sie da ???? nodiscard, wrzucic settery i gettery, czemu nie wwszystkie i dlaczego w public/proteceted
+//czy cos nie dopisac, np init? albo inne metody wirtualne? to na koniec
 namespace az{
 
 class Protocol {
@@ -29,7 +30,7 @@ class Protocol {
     //virtual void deinit()=0;
 
     //default destructor
-    virtual ~Protocol() = default;
+    virtual ~Protocol();
 
     virtual bool send(const std::string& data)=0; //send data through protocol
     virtual bool receive(std::string& outdata)=0; //receive data through protocol
@@ -38,6 +39,9 @@ class Protocol {
     const std::string& getName() const;
     Type getType() const;
     State getState() const;
+
+    bool operator==(const Protocol& other) const;
+    bool operator!=(const Protocol& other) const;
 
     protected:
         static constexpr State defaultState = State::Uninitialized; //static to jedna wartosc dla całej klasy - dla wszytstkich obiektów

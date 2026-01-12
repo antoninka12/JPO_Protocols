@@ -10,7 +10,7 @@ namespace az{
             int m_baudRate;
             int m_dataBits;
             int m_stopBits;
-            bool m_parity; //1:even, 0:odd
+            bool m_parity; //1:even, 0:odd enum mozna zrobic
             void initHardware();
             void deinitHardware();
             bool isConfigValid() const;
@@ -28,22 +28,22 @@ namespace az{
             bool deinit();
 
             //setters and getters
-            void setPinTx(int pinTx);
+            bool setPinTx(int pinTx);
             int getPinTx() const;
 
-            void setPinRx(int pinRx);
+            bool setPinRx(int pinRx);
             int getPinRx() const;
 
-            void setBaudRate(int baudRate);
+            bool setBaudRate(int baudRate);
             int getBaudRate() const;
 
-            void setDataBits(int dataBits);
+            bool setDataBits(int dataBits);
             int getDataBits() const;
 
-            void setStopBits(int stopBits);
+            bool setStopBits(int stopBits);
             int getStopBits() const;
 
-            void setParity(bool parity);
+            bool setParity(bool parity);
             bool getParity() const;
 
     };
