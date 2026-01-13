@@ -1,27 +1,52 @@
 #include "UART.hpp"
 
 namespace az{
-            //default constructor
-            UART::UART():Protocol("UART", Type::UART),m_pinTx(-1), m_pinRx(-1), m_baudRate(0), m_dataBits(0), m_stopBits(0), m_parity(false){}
-            //parametrized constructor
-            UART::UART(int pinTx, int pinRx, int baudRate, int dataBits, int stopBits):Protocol("UART", Type::UART),m_pinTx(pinTx), m_pinRx(pinRx), m_baudRate(baudRate), 
-            m_dataBits(dataBits), m_stopBits(stopBits), m_parity(false){
+            
+            UART::UART():Protocol("UART", Type::UART),
+            m_pinTx(-1), 
+            m_pinRx(-1), 
+            m_baudRate(0), 
+            m_dataBits(0), 
+            m_stopBits(0), 
+            m_parity(false){}
+            
+            UART::UART(int pinTx, 
+                int pinRx, 
+                int baudRate, 
+                int dataBits, 
+                int stopBits):Protocol("UART", Type::UART),
+                m_pinTx(pinTx), 
+                m_pinRx(pinRx), 
+                m_baudRate(baudRate), 
+                m_dataBits(dataBits), 
+                m_stopBits(stopBits), 
+                m_parity(false){
                 if(!isConfigValid()){
                     setState(State::Error);
                     return;
                 }
                 initHardware();
             }
-            //parametrized constructor with parity
-            UART::UART(int pinTx, int pinRx, int baudRate, int dataBits, int stopBits, bool parity):Protocol("UART", Type::UART),m_pinTx(pinTx), m_pinRx(pinRx), m_baudRate(baudRate), 
-            m_dataBits(dataBits), m_stopBits(stopBits), m_parity(parity){
+            
+            UART::UART(int pinTx, 
+                int pinRx, 
+                int baudRate, 
+                int dataBits, 
+                int stopBits, 
+                bool parity):Protocol("UART", Type::UART),
+                m_pinTx(pinTx), 
+                m_pinRx(pinRx), 
+                m_baudRate(baudRate), 
+                m_dataBits(dataBits), 
+                m_stopBits(stopBits), 
+                m_parity(parity){
                 if(!isConfigValid()){
                     setState(State::Error);
                     return;
                 }
                 initHardware();
             }
-            //destructor
+            
             UART::~UART(){
                 if(getState()==State::Ready){
                     deinitHardware();
@@ -76,7 +101,6 @@ namespace az{
                     }
                     m_sendbuffer.push_back(c);
                 }
-                //sendind data through UART
                 m_recvbuffer+=m_sendbuffer;
                 return true;
             }
@@ -90,7 +114,7 @@ namespace az{
                 return true;
             }
 
-            //setters and getters
+            
             bool UART::setPinTx(int pinTx){
                 if(pinTx>=0 && pinTx!=m_pinRx && pinTx!=m_pinTx){
                     m_pinTx=pinTx;

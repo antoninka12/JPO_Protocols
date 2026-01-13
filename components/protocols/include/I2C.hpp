@@ -3,7 +3,12 @@
 #include "Protocol.hpp"
 
 namespace az{
-    //???
+    /**
+     * \typedef BusID 
+     * \brief Logical interpretation of I2C magistral.
+     * It represents bus identifier, type is int but seperated to be
+     * more visible. It provides more possibilities for extensions.
+     */
     using BusID=int; 
     /**
      * \class I2C
@@ -20,26 +25,27 @@ namespace az{
              * \brief I2C specific fields
              * They represent standard configuration for I2C protocol.
             */
-            BusID m_busid; /**< */
+            BusID m_busid; /**< I2C bus number*/
             int m_deviceAddress; /**<Specific addres for device in I2C protocol */
             int m_SDApin; /**<SDA pin number */
             int m_SCLpin; /**<SCL pin number */
             int m_frequency; /**<Clock frequency in Hz */
-             /**
+             
+            std::string m_sendbuffer; /**< Logical representation of transmit buffer, it stores data for sending */
+            std::string m_recvbuffer; /**< Logical representation of receive buffer, stores received data */
+            /**
              * Private methods.
              * \brief Logical initialization of I2C.
              * It sets the state to Ready.
              * It does not interact with hardware directly.
              * Used only in controlled way.
              */
-            std::string m_sendbuffer;
-            std::string m_recvbuffer;
             void initHardware();
             /**
              * \brief Logical deinitialization of I2C.
              * It sets the state to Uninitialized.
              * It does not interact with hardware directly.
-             * Used only in controlled way.
+             * Used only in controlled way, it clears data buffors.
              */
             void deinitHardware();
              /**
@@ -55,10 +61,17 @@ namespace az{
             * Used while creating I2C objects.
             */
             I2C();/**< Default constructor, pins and addresses are set to -1, frequency to 0*/
-            I2C(BusID busid, int deviceAddress, int SDApin, int SCLpin, int freq);/**<Parametrized constructor, 
+            I2C(BusID busid, 
+                int deviceAddress, 
+                int SDApin, 
+                int SCLpin, 
+                int freq);/**<Parametrized constructor, 
             setting all pins, frequency, busID, device Address */
 
-            I2C(BusID busid, int deviceAddress, int SDApin, int SCLpin);/**<Parametrized constructor, 
+            I2C(BusID busid, 
+                int deviceAddress, 
+                int SDApin, 
+                int SCLpin);/**<Parametrized constructor, 
             setting all pins, frequency to 100kHz, busID, device Address */
             
              /**
@@ -72,7 +85,7 @@ namespace az{
              * It provides logical implementation of sending data through I2C.
              * Checks if state is Ready before sending data.
              * Checks if byteCount is correct.
-             * \return return true if the I2C is in Rady state and size of data is correct.
+             * \return return true if the I2C is in Ready state and size of data is correct.
              * \param data - data to be sent
              */
             bool send(const std::string& data) override;
@@ -80,7 +93,7 @@ namespace az{
              * \brief Recive data through I2C.
              * It provides logical implementation of receiving data through I2C.
              * Checks if state is Ready before reciving data.
-             * \return true if state is ready, false otherwise.
+             * \return true if state is ready and data isn't empty, false otherwise.
              * \param outdata - received data
              */
             bool receive(std::string& outdata) override;

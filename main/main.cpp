@@ -31,6 +31,7 @@ extern "C" void app_main(void){
         10,        /**< data bits - max 8 - wrong conf*/ 
         1         /**<stop bits*/ 
     );
+    //UART - configuration
    ESP_LOGI(TAG, "UART state: %s", stateToString(uart_bad_conf.getState()));
    bool result = uart_bad_conf.setDataBits(6);
    ESP_LOGI(TAG, "UART: set Data Bits result: %d", result);
@@ -47,6 +48,7 @@ extern "C" void app_main(void){
     ESP_LOGI(TAG, "UART: setPinRx(2) result: %d", result);
     ESP_LOGI(TAG,"UART: Pin Rx: %d",uart_bad_conf.getPinRx() );
     ESP_LOGI(TAG, "UART state: %s", stateToString(uart_bad_conf.getState()));
+    //sending and recieving
     result=uart_bad_conf.send("Hello ");
     ESP_LOGI(TAG, "UART: send result: %d", result);
     result=uart_bad_conf.send("Kasia");
@@ -58,6 +60,7 @@ extern "C" void app_main(void){
     ESP_LOGI(TAG, "UART: deinit result: %d", result);
     ESP_LOGI(TAG, "UART state: %s", stateToString(uart_bad_conf.getState()));
 
+    //I2C - coniffiguration
     az::I2C i2c;
     ESP_LOGI(TAG, "I2C state: %s", stateToString(i2c.getState()));
     result=i2c.setSDApin(1);
@@ -76,6 +79,7 @@ extern "C" void app_main(void){
     result=i2c.init();
     ESP_LOGI(TAG, "I2C: init result: %d", result);
     ESP_LOGI(TAG, "I2C state: %s", stateToString(i2c.getState()));
+    //sending and receiving
     result=i2c.send("\x31\x02\x05");
      ESP_LOGI(TAG, "I2C: send result: %d", result);
      result=i2c.receive(outdata);
@@ -85,10 +89,12 @@ extern "C" void app_main(void){
         ESP_LOGI(TAG, "0x%02X", c);
     }
 
+    //SPI configuration
     az::SPI spi(1,2,3,4,10000, az::SPI::Mode::Mode1);
     ESP_LOGI(TAG,"SPI: MSB first?: %d",spi.getMSBfirst() );
     ESP_LOGI(TAG, "SPI state: %s", stateToString(spi.getState()));
     ESP_LOGI(TAG, "SPI mode: %d",static_cast<int>(spi.getMode()));
+    //sending and receiving
     result=spi.send("\xD5\x05\xF5");
     ESP_LOGI(TAG, "SPI: send result: %d", result);
     result=spi.receive(outdata);

@@ -24,8 +24,8 @@ namespace az{
             int m_stopBits; /**< number of stop bits (1 or 2) */
             bool m_parity; /**<parity bit: true-even, false-odd*/
 
-            std::string m_sendbuffer;
-            std::string m_recvbuffer;
+            std::string m_sendbuffer;/**< Logical representation of transmit buffer, it stores data for sending */
+            std::string m_recvbuffer; /**< Logical representation of receive buffer, stores received data */
             /**
              * Private methods.
              * \brief Logical initialization of UART protocol.

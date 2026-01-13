@@ -1,8 +1,6 @@
 #pragma once
 
 #include <string>
-//dodac noexcept gdzie sie da ???? nodiscard, wrzucic settery i gettery, czemu nie wwszystkie i dlaczego w public/proteceted
-//czy cos nie dopisac, np init? albo inne metody wirtualne? to na koniec
 /** 
  * \class Protocol
  * \brief Base class for communication protocols
@@ -41,19 +39,6 @@ class Protocol {
             Uninitialized, /**< Protocol is not initialized, it isn't ready to be used */
             Error /**< Protocol is in error state */
         };
-        /******************************************/
-      /* enum class Status{
-            Ok,
-            Busy,
-            Timeout,
-            Error
-        };*/
-
-    //virtual void init()=0;
-    //virtual void deinit()=0;
-    //default destructor
-     /******************************************/
-
      /**
      * A destructor.
      * \brief Virtual public destructor in base class- Protocol.
@@ -65,13 +50,13 @@ class Protocol {
      * \brief Send data through protocol.
      * \param data - data to be sent
     */
-    virtual bool send(const std::string& data)=0; //send data through protocol
+    virtual bool send(const std::string& data)=0; 
     /**
      * A pure virtual function. 
      * \brief Receive data through protocol.
      * \param outdata - received data
     */
-    virtual bool receive(std::string& outdata)=0; //receive data through protocol
+    virtual bool receive(std::string& outdata)=0; 
     /**
      * A getter.
      * \brief Get name of the protocol.
@@ -141,7 +126,7 @@ class Protocol {
         * Can be used only by derived classes to check the tranistion rules.
         * If state is Error, it can only be changed to Uninitialized.
         */
-       bool setState(State newState);
+         bool setState(State newState);
      private:
         /**
          * \brief name of the protocol

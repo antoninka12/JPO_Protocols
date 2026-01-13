@@ -1,6 +1,5 @@
 #pragma once
 #include "Protocol.hpp"
-//w zwykłym konstruktorze w jakims stanie? jak zrobic init? reiinit? w jakim stanie jest jak stworzymy domyslny, potem ustawimy to bedzie uninitialized, ale trzeba zrobic init, a jest prywatne
 namespace az{
     /**
      * \class SPI 
@@ -8,7 +7,7 @@ namespace az{
      * It dereives form Protocol base class.
      * It provides methods for configurating, initializing, sending and receiving data
      * through SPI protocol.
-     * It includes fields specific for SPI protocol. F.e. pins, frequency.
+     * It includes fields specific for SPI protocol. F.e. pins, mode, frequency.
      * \author Antonia Zdziebko
      */
     class SPI: public Protocol{
@@ -39,8 +38,8 @@ namespace az{
             Mode m_mode; /**<Logical SPI mode */
             bool m_msbFirst;/**< True if MSB is transmiteed first */
             
-            std::string m_sendbuffer;
-            std::string m_recvbuffer;
+            std::string m_sendbuffer; /**< Logical representation of transmit buffer, it stores data for sending */
+            std::string m_recvbuffer; /**< Logical representation of receive buffer, stores received data */
             /**
              * Private methods.
              * \brief Logical initialization of SPI.
@@ -93,7 +92,8 @@ namespace az{
              * \brief Send data through SPI.
              * It provides logical implementation of sending data through SPI.
              * Checks if state is Ready before sending data.
-             * Checks if data is empty.
+             * Checks if data is empty. 
+             * Device addres is not send - first byte.
              * \return return true if the SPI is in Rady state and the data is not empty, false otherwise.
              * \param data - data to be sent
              */

@@ -3,9 +3,17 @@
 namespace az{
             I2C::I2C():Protocol("I2C", Type::I2C),
             m_busid(-1), m_deviceAddress(-1), m_SDApin(-1), m_SCLpin(-1), m_frequency(0){}
-            //parametrized constructor - I2C can exist in error state if config is invalid
-            I2C::I2C(BusID busid, int deviceAddress, int SDApin, int SCLpin, int freq):Protocol("I2C", Type::I2C),
-            m_busid(busid), m_deviceAddress(deviceAddress), m_SDApin(SDApin), m_SCLpin(SCLpin), m_frequency(freq){
+
+            I2C::I2C(BusID busid, 
+                int deviceAddress, 
+                int SDApin, 
+                int SCLpin, 
+                int freq):Protocol("I2C", Type::I2C),
+                m_busid(busid), 
+                m_deviceAddress(deviceAddress), 
+                m_SDApin(SDApin), 
+                m_SCLpin(SCLpin), 
+                m_frequency(freq){
                 if(!isConfigValid()){
                     setState(State::Error);
                     return;
@@ -13,18 +21,25 @@ namespace az{
                 initHardware();
             }
 
-            I2C::I2C(BusID busid, int deviceAddress, int SDApin, int SCLpin):Protocol("I2C", Type::I2C),
-            m_busid(busid), m_deviceAddress(deviceAddress), m_SDApin(SDApin), m_SCLpin(SCLpin), m_frequency(100000){
+            I2C::I2C(BusID busid, 
+                int deviceAddress, 
+                int SDApin, 
+                int SCLpin):Protocol("I2C", Type::I2C),
+                m_busid(busid), 
+                m_deviceAddress(deviceAddress), 
+                m_SDApin(SDApin), 
+                m_SCLpin(SCLpin), 
+                m_frequency(100000){
                 if(!isConfigValid()){
-                setState(State::Error);
-                return;
+                    setState(State::Error);
+                    return;
                 }
                 initHardware();
             }
-            //destructor - deinitializes hardware 
+            
             I2C::~I2C(){
                 if (getState() == State::Ready) {
-                deinitHardware();
+                    deinitHardware();
                 }
             }
             void I2C::initHardware(){
@@ -62,7 +77,7 @@ namespace az{
                 deinitHardware();
                 return getState() == State::Uninitialized;
             }
-            bool I2C::send(const std::string& data){ //mozna dodac sprawdzanie czy magistrala jest zajeta
+            bool I2C::send(const std::string& data){
                 if(getState() != State::Ready){
                     return false;
                 }
@@ -77,11 +92,7 @@ namespace az{
                 }
                 m_sendbuffer.clear();
                 m_sendbuffer=data;
-                if(byteCount>1){
-                    m_recvbuffer=data.substr(1);
-                }else{
-                    m_recvbuffer.clear();
-                }
+                m_recvbuffer=data.substr(1);
                 //sendind data through I2C
                 return true;
             }
