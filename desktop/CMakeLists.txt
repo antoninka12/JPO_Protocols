@@ -1,12 +1,19 @@
 cmake_minimum_required(VERSION 3.16)
-project(protocols_desktop)
+project(protocols_desktop LANGUAGES CXX)
 
-add_subdirectory(../components/protocols protocols)
+add_library(protocols STATIC
+    ../components/protocols/src/Protocol.cpp
+    ../components/protocols/src/UART.cpp
+    ../components/protocols/src/I2C.cpp
+    ../components/protocols/src/SPI.cpp
+)
 
-add_executable(protocols_demo main.cpp)
-
-target_include_directories(protocols_demo PRIVATE
+target_include_directories(protocols PUBLIC
     ../components/protocols/include
 )
 
-target_link_libraries(protocols_demo protocols)
+add_executable(protocols_desktop
+    main_desktop.cpp
+)
+
+target_link_libraries(protocols_desktop protocols)
