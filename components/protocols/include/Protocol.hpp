@@ -58,7 +58,7 @@ class Protocol {
      * A destructor.
      * \brief Virtual public destructor in base class- Protocol.
      */
-    virtual ~Protocol();
+    virtual ~Protocol()=default;
     
     /**
      * A pure virtual function. 
@@ -131,8 +131,8 @@ class Protocol {
          * \param type- type of the protocol
          * Used by derived classes to set specific name and type of protocol.
         */
-        Protocol();
-       Protocol(const std::string& name, Type type);
+        Protocol(); /**< Default constructor */
+       Protocol(const std::string& name, Type type); /**< Parametrized constructor */
        /**
         * A protected setter.
         * \brief Set State of the protocol.

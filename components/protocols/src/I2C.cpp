@@ -32,6 +32,8 @@ namespace az{
             }
             void I2C::deinitHardware(){
                 setState(State::Uninitialized);
+                m_recvbuffer.clear();
+                m_sendbuffer.clear();
             }
             bool I2C::isConfigValid() const {
                 return m_busid >= 0 &&
@@ -65,13 +67,20 @@ namespace az{
                     return false;
                 }
                 
-                const std::size_t byteCount = data.size(); //to zmienic
+                const std::size_t byteCount = data.size(); 
 
                 if (byteCount < 2) {
                     return false;
                 }
                 if (byteCount > 32) {
                     return false;
+                }
+                m_sendbuffer.clear();
+                m_sendbuffer=data;
+                if(byteCount>1){
+                    m_recvbuffer=data.substr(1);
+                }else{
+                    m_recvbuffer.clear();
                 }
                 //sendind data through I2C
                 return true;
@@ -81,8 +90,12 @@ namespace az{
                 if(getState() != State::Ready){
                     return false;
                 }
+                if(m_recvbuffer.empty()){
+                    return false;
+                }
 
-                outdata="Data through I2C";
+                outdata=m_recvbuffer;
+                m_recvbuffer.clear();
                 return true;
             }
 

@@ -1,0 +1,9 @@
+idf_component_register(
+    SRCS
+        "src/Protocol.cpp"
+        "src/SPI.cpp"
+        "src/I2C.cpp"
+        "src/UART.cpp"
+    INCLUDE_DIRS
+        "include"
+)

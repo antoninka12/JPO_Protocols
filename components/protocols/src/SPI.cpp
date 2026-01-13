@@ -15,28 +15,31 @@ namespace az{
         }
         initHardware();
     }
+    
     SPI::SPI(int pinMOSI, int pinMISO, int pinSCK, int pinSS, int frequency, Mode mode):Protocol("SPI", Type::SPI),
-    m_pinMOSI(pinMOSI), m_pinMISO(pinMISO),m_pinSCK(pinSCK), m_pinSS(pinSS), m_frequency(frequency), m_mode(mode){
+    m_pinMOSI(pinMOSI), m_pinMISO(pinMISO),m_pinSCK(pinSCK), m_pinSS(pinSS), m_frequency(frequency), m_mode(mode), m_msbFirst(true){
         if(!isConfigValid()){
-            setState(State::Error);
+            setState(State::Error); 
             return;
         }
-        initHardware();
+        initHardware(); 
     }
      //destructor
     SPI::~SPI(){
-        if(getState()==State::Ready){
+        if(getState()==State::Ready){ 
             deinitHardware();
         }
     }
-    void SPI::initHardware(){
+    void SPI::initHardware(){  
         setState(State::Ready);
     }
-    void SPI::deinitHardware(){
+    void SPI::deinitHardware(){ 
         setState(State::Uninitialized);
+        m_recvbuffer.clear();
+        m_sendbuffer.clear();
     }
     bool SPI::isConfigValid() const{
-        return m_pinMOSI >=0 && 
+        return m_pinMOSI >=0 && //tu troszke pozmieniac
         m_pinMISO >=0 &&
         m_pinSCK >=0 &&
         m_pinSS >=0 && 
@@ -49,7 +52,7 @@ namespace az{
         m_pinMISO != m_pinSS &&
         m_pinSCK  != m_pinSS;
     }
-    bool SPI::init(){
+    bool SPI::init(){ 
         if(getState() == State::Ready){
             return true;
         }
@@ -61,7 +64,7 @@ namespace az{
         return getState() == State::Ready;
     }
     bool SPI::deinit(){
-        if(getState() != State::Ready){
+        if(getState() != State::Ready){ 
             return false;
         }
         deinitHardware();
@@ -72,8 +75,16 @@ namespace az{
         if(getState() != State::Ready){
             return false;
         }
-        if(data.empty()){
+       
+       if(data.empty()){
             return false;
+        }
+        m_sendbuffer.clear();
+        m_recvbuffer.clear();
+        for(unsigned char c : data){
+            m_sendbuffer.push_back(c);
+            unsigned char response = ~c;
+            m_recvbuffer.push_back(response);
         }
         return true;
     }
@@ -81,14 +92,18 @@ namespace az{
         if(getState() != State::Ready){
             return false;
         }
-        outdata="Data through SPI";
+        if(m_recvbuffer.empty()){
+            return false;
+        }
+        outdata=m_recvbuffer;
+        m_recvbuffer.clear();
         return true;
     }
 
 
     //setters and getters
     bool SPI::setPinMOSI(int pinMOSI){
-        if(pinMOSI >=0 && pinMOSI != m_pinMISO && pinMOSI != m_pinSCK && pinMOSI != m_pinSS && pinMOSI != m_pinMOSI){
+        if(pinMOSI >=0 && pinMOSI != m_pinMISO && pinMOSI != m_pinSCK && pinMOSI != m_pinSS && pinMOSI != m_pinMOSI){  
             m_pinMOSI=pinMOSI;
             setState(State::Uninitialized);
             return true;
@@ -133,7 +148,7 @@ namespace az{
         return m_pinSS;
     }
     bool SPI::setFrequency(int frequency){
-        if(frequency >0 && frequency != m_frequency){
+        if(frequency >0 && frequency != m_frequency){ //nie zmieniamy na uninitialized jesli ta sama wartosc, w innych tak samo zorbic? moze osobny if z komunikatem
             m_frequency=frequency;
             setState(State::Uninitialized);
             return true;

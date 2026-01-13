@@ -39,6 +39,8 @@ namespace az{
             Mode m_mode; /**<Logical SPI mode */
             bool m_msbFirst;/**< True if MSB is transmiteed first */
             
+            std::string m_sendbuffer;
+            std::string m_recvbuffer;
             /**
              * Private methods.
              * \brief Logical initialization of SPI.
@@ -65,7 +67,7 @@ namespace az{
         public:
             /** 
             * \brief Constructors of SPI class
-            * Used to create and destroy SPI objects.
+            * Used while creating SPI objects.
             */
             SPI(); /**< Default constructor, pins are set to -1, frequency to 0, mode to Mode0, msbFirst to true */
             SPI(int pinMOSI, 
@@ -128,22 +130,22 @@ namespace az{
              * Setters and geters
              * \brief Setting and getting all private fields.
             */
-            bool setPinMOSI(int pinMOSI); /**< Setting MOSI pin for SPI if it is valid*/
+            bool setPinMOSI(int pinMOSI); /**< Setting MOSI pin for SPI if input is valid*/
             int getPinMOSI() const; /**< Getting MOSI pin */
 
-            bool setPinMISO(int pinMISO);/**< Setting MISO pin for SPI if it is valid*/
+            bool setPinMISO(int pinMISO);/**< Setting MISO pin for SPI if input is valid*/
             int getPinMISO() const;/**< Getting MISO pin */
 
-            bool setPinSCK(int pinSCK);/**< Setting SCK pin for SPI if it is valid*/
+            bool setPinSCK(int pinSCK);/**< Setting SCK pin for SPI if input is valid*/
             int getPinSCK() const;/**< Getting SCK pin */
 
-            bool setPinSS(int pinSS);/**< Setting SS pin for SPI if it is valid*/
+            bool setPinSS(int pinSS);/**< Setting SS pin for SPI if input is valid*/
             int getPinSS() const;/**< Getting SS pin */
 
-            bool setFrequency(int frequency);/**< Setting frequency of clock for SPI if it is valid*/
+            bool setFrequency(int frequency);/**< Setting frequency of clock for SPI if input is valid*/
             int getFrequency() const;/**< Getting frequency in Hz */
 
-            bool setMode(Mode mode);/**< Setting SPI mode if it is valid*/
+            bool setMode(Mode mode);/**< Setting SPI mode if input is valid*/
             Mode getMode() const;/**< Getting SPI mode*/
 
             bool setMSBfirst(bool msbFirst);/**< Setting msbFirst bit - true: MSB first, false otherwise*/

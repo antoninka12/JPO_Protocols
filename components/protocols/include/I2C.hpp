@@ -32,6 +32,8 @@ namespace az{
              * It does not interact with hardware directly.
              * Used only in controlled way.
              */
+            std::string m_sendbuffer;
+            std::string m_recvbuffer;
             void initHardware();
             /**
              * \brief Logical deinitialization of I2C.
@@ -49,8 +51,8 @@ namespace az{
             bool isConfigValid() const;
         public: 
             /** 
-            * \brief Constructors of SPI class
-            * Used to create and destroy SPI objects.
+            * \brief Constructors of I2Cclass
+            * Used while creating I2C objects.
             */
             I2C();/**< Default constructor, pins and addresses are set to -1, frequency to 0*/
             I2C(BusID busid, int deviceAddress, int SDApin, int SCLpin, int freq);/**<Parametrized constructor, 

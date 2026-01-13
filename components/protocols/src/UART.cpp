@@ -25,6 +25,8 @@ namespace az{
             UART::~UART(){
                 if(getState()==State::Ready){
                     deinitHardware();
+                    m_sendbuffer.clear();
+                    m_recvbuffer.clear();
                 }
             }
             void UART::initHardware(){
@@ -67,12 +69,15 @@ namespace az{
                 if(data.empty()){
                     return false;
                 }
+                m_sendbuffer.clear();
                 for (char c : data) {
                     if (c == '\0') {   
                         continue;
                     }
+                    m_sendbuffer.push_back(c);
                 }
                 //sendind data through UART
+                m_recvbuffer+=m_sendbuffer;
                 return true;
             }
             bool UART::receive(std::string& outData){
@@ -80,7 +85,8 @@ namespace az{
                     return false;
                 }
 
-                outData="Data through UART";
+                outData=m_recvbuffer;
+                m_recvbuffer.clear();
                 return true;
             }
 
