@@ -7,10 +7,10 @@
 
 const char* stateToString(az::Protocol::State state) {
     switch (state) {
-        case az::Protocol::State::Ready:         return "Ready";
+        case az::Protocol::State::Ready: return "Ready";
         case az::Protocol::State::Uninitialized: return "Uninitialized";
-        case az::Protocol::State::Error:         return "Error";
-        default:                                 return "Unknown";
+        case az::Protocol::State::Error: return "Error";
+        default: return "Unknown";
     }
 }
 
